@@ -22,13 +22,9 @@ esbuild.buildSync({
   define: {
     'process.env.API_KEY': JSON.stringify(process.env.API_KEY || ''),
   },
+  // Bundle React, react-router-dom, and lucide-react so there is a single React instance
   external: [
-    'react',
-    'react-dom',
-    'lucide-react',
     'uuid',
-    'react-router-dom',
-    '@google/genai',
   ],
 });
 
@@ -38,7 +34,7 @@ fs.copyFileSync(path.join(root, 'index.html'), path.join(distDir, 'index.html'))
 // 4. Replace script src in dist/index.html
 const distHtmlPath = path.join(distDir, 'index.html');
 let html = fs.readFileSync(distHtmlPath, 'utf8');
-html = html.replace('src="./index.tsx"', 'src="./index.js"');
+html = html.replace('src="./index.tsx"', 'src="/index.js"');
 fs.writeFileSync(distHtmlPath, html);
 
 console.log('Build complete. dist/index.html and dist/index.js are ready.');
